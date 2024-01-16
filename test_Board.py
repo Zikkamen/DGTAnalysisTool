@@ -1,3 +1,4 @@
+import copy
 from unittest import TestCase
 
 from chess import Board, Move
@@ -33,10 +34,13 @@ class TestBoard(TestCase):
         test_board.push(Move.from_uci('d2d4'))
         board.set_fen(test_board.fen().split(' ')[0])
 
+        new_board = copy.deepcopy(test_board)
+        new_board.push(Move.from_uci('h7h5'))
+
         test_board.push(Move.from_uci('f7f5'))
         board.set_fen(test_board.fen().split(' ')[0])
 
-        # board.set_fen(last_fen.split(' ')[0])
+        board.set_fen(new_board.fen().split(' ')[0])
 
         game = board.get_pgn()
 
@@ -44,3 +48,8 @@ class TestBoard(TestCase):
 
         lichess_client = LichessClient()
         lichess_client.push_pgn_to_lichess(game.__str__())
+
+
+if __name__ == "__main__":
+    testboard = TestBoard()
+    testboard.test_set_fen()
